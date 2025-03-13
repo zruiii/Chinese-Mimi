@@ -1,5 +1,9 @@
 # Chinese-Mimi
 
+<p align="center">
+    <img src="assets/mimi.jpg" width="1080"/>
+<p>
+
 Chinese-Mimi 是将 Moshi 模型的声码器 Mimi 适配到中文语料的优化版本。本仓库提供了 Mimi 的完整训练和推理代码，并支持高效的分布式训练。
 
 我们已在超过 10,000 小时的 [WenetSpeech4TTS](https://modelscope.cn/datasets/dukguo/WenetSpeech4TTS/files) 数据集上训练了多个版本的 Chinese-Mimi 模型，这些预训练模型可供直接使用，无需从头训练。
