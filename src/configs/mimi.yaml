@@ -1,0 +1,162 @@
+sample_rate: 16000
+frame_rate: 12.5
+
+system:
+  seed: 42
+  mp_start_method: "fork"
+  num_threads: 8
+
+logging:
+  level: "INFO"
+  dir: "outputs/logs"
+  filename: "train.log"
+
+hydra:
+  output_subdir: null
+  run:
+    dir: .
+
+dataset:
+  root_dir: "data/WenetSpeech4TTS/Premium"
+  embed_dir: "processed_data/WenetSpeech4TTS/Premium"
+  train_file: "data/wenetspeech4tts_Premium_train.jsonl"
+  valid_file: "data/wenetspeech4tts_Premium_valid.jsonl"
+  valid_ratio: 0.01
+  batch_size: 16
+  num_workers: 10
+  num_samples: null
+  segment_duration: 4
+  min_segment_ratio: 0.8
+  sample_on_duration: true
+  shuffle: false
+  downsample_rate: 320
+  train:
+    num_samples: 500000
+    shuffle: true
+  valid:
+    num_samples: 10000
+    shuffle: false
+
+seanet:
+  channels: 1
+  dimension: 512
+  causal: True
+  n_filters: 64
+  n_residual_layers: 1
+  activation: "ELU"
+  compress: 2
+  dilation_base: 2
+  disable_norm_outer_blocks: 0
+  kernel_size: 7
+  residual_kernel_size: 3
+  last_kernel_size: 3
+  norm: "none"
+  pad_mode: "constant"
+  ratios: [8, 5, 4, 2]
+  true_skip: True
+
+transformer:
+  d_model: ${seanet.dimension}
+  num_heads: 8
+  num_layers: 8
+  causal: True
+  layer_scale: 0.01
+  context: 250
+  max_period: 10000
+  gating: "none"
+  norm: "layer_norm"
+  positional_embedding: "rope"
+  dim_feedforward: 2048
+  input_dimension: ${seanet.dimension}
+  output_dimensions: 
+  - ${seanet.dimension}
+
+quantizer:
+  dimension: 256
+  n_q: 8
+  bins: 2048
+  input_dimension: ${seanet.dimension}
+  output_dimension: ${seanet.dimension}
+  q_dropout: true
+  no_quantization_rate: 0.5
+
+optim:
+  epochs: 100
+  updates_per_epoch: 2000
+  lr: 2e-4
+  max_norm: 0.
+  optimizer: adamw
+  adam:
+    betas: [0.5, 0.9]
+    weight_decay: 0.
+  adamw:
+    betas: [0.5, 0.9]
+    weight_decay: 0.05
+  ema:
+    use: true
+    updates: 1
+    device: "cuda"
+    decay: 0.99
+  print_freq: 100
+
+losses:
+  adv: 4.0
+  feat: 4.0
+  l1: 0
+  msspec: 0
+
+balancer:
+  balance_grads: true
+  ema_decay: 0.999
+  per_batch_item: true
+  total_norm: 1.0
+
+adversarial:
+  every: 1
+  adversaries:
+  - msstftd
+  adv_loss: hinge
+  feat_loss: l1
+
+msstftd:
+  in_channels: 1
+  out_channels: 1
+  filters: 32
+  norm: weight_norm
+  n_ffts:
+  - 1024
+  - 2048
+  - 512
+  - 256
+  - 128
+  hop_lengths:
+  - 256
+  - 512
+  - 128
+  - 64
+  - 32
+  win_lengths:
+  - 1024
+  - 2048
+  - 512
+  - 256
+  - 128
+  activation_slope: 0.3
+
+msspec:
+  sample_rate: ${sample_rate}
+  range_start: 6
+  range_end: 11
+  n_mels: 64
+  f_min: 64
+  f_max: null
+  normalized: true
+  use_alpha_weights: false
+  floor_level: 1.0e-05
+
+checkpoint:
+  dir: "outputs/save"
+  resume_from_checkpoint: "outputs/save/20241229_142056/checkpoint_epoch20.pt"
+  save_last: false
+  save_every: 5
+  reset_epoch: true

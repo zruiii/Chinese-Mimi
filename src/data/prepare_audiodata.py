@@ -66,7 +66,7 @@ def prepare_metadata(root_dir: str,
             f.write(json.dumps(meta, ensure_ascii=False) + "\n")
 
 if __name__ == "__main__":
-    category = "Standard"
+    category = "Premium"
     root_dir = f"data/WenetSpeech4TTS/{category}"
     train_file = f"data/wenetspeech4tts_{category}_train.jsonl"
     valid_file = f"data/wenetspeech4tts_{category}_valid.jsonl"
