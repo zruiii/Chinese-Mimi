@@ -1,17 +1,7 @@
-"""
-@File   : decoder.py
-@Time   : 2024/11/11 15:06:30
-@Author : zharui 
-@Email  : zharui@baidu.com
-"""
-
-import math
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import typing as tp
 import numpy as np
-from dataclasses import dataclass
 
 from .base import StreamingContainer
 from .blocks import SEANetResnetBlock

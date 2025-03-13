@@ -1,11 +1,10 @@
-import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import typing as tp
 import numpy as np
 
-from einops import rearrange, repeat
+from einops import rearrange
 from dataclasses import dataclass
 
 from .rope import RotaryEmbedding

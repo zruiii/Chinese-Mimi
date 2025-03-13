@@ -1,17 +1,7 @@
-"""
-@File   : encoder.py
-@Time   : 2024/11/11 15:03:59
-@Author : zharui 
-@Email  : zharui@baidu.com
-"""
-
-import math
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import typing as tp
 import numpy as np
-from dataclasses import dataclass
 
 from .base import StreamingContainer
 from .conv import StreamingConv1d

@@ -1,10 +1,3 @@
-"""
-@File   : conv.py
-@Time   : 2024/11/11 14:45:19
-@Author : zharui 
-@Email  : zharui@baidu.com
-"""
-
 import math
 import torch
 import typing as tp

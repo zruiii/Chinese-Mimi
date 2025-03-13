@@ -2,7 +2,7 @@ import json
 import numpy as np
 
 res = []
-for line in open("data/wenetspeech4tts_Standard_train.jsonl"):
+for line in open("data/wenetspeech4tts_premium_train.jsonl"):
     res.append(json.loads(line.strip())['duration'])
 
 print(f"training samples: {len(res)}")

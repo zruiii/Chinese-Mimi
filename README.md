@@ -90,7 +90,7 @@ mkdir data/WenetSpeech4TTS/test
 请从验证集中随机选取一些测试样例，将其放入 `/test` 文件夹中。
 执行以下测试脚本，对模型在验证集上的效果进行测试。
 ```bash
-python -m test.mimi --epoch 20 --model-id 20241211_202021
+python -m src.utils.inference --epoch 20 --model-id 20241211_202021
 ```
 
 #### Gradio 服务

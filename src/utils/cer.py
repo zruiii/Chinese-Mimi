@@ -1,4 +1,3 @@
-import os
 import torch
 from omegaconf import OmegaConf
 from src.models import MimiModel
@@ -9,13 +8,9 @@ from src.modules import (
     SplitResidualVectorQuantizer
 )
 
-import soundfile as sf
 from collections import OrderedDict
-from src.utils.helper import f32_pcm
 
 import whisperx
-import torchaudio
-from visqol_wrapper import ViSQOL
 import numpy as np
 
 def load_mimi(epoch, model_id, use_ema=True, device='cuda'):
