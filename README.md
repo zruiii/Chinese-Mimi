@@ -4,10 +4,11 @@
     <img src="assets/mimi.jpg" width="1080"/>
 <p>
 
-Chinese-Mimi 是将 Moshi 模型的声码器 Mimi 适配到中文语料的优化版本。本仓库提供了 Mimi 的完整训练和推理代码，并支持高效的分布式训练。
+Chinese-Mimi 是一个针对中文语音优化的声码器模型，它基于 [Moshi](https://arxiv.org/abs/2410.00037) 框架中的 Mimi 组件进行改进。本仓库不仅提供了 Mimi 的完整训练和推理代码实现，还支持高效的分布式训练方案。
 
-我们已在超过 10,000 小时的 [WenetSpeech4TTS](https://modelscope.cn/datasets/dukguo/WenetSpeech4TTS/files) 数据集上训练了多个版本的 Chinese-Mimi 模型，这些预训练模型可供直接使用，无需从头训练。
+我们已经在超过 10,000 小时的高质量 [WenetSpeech4TTS](https://modelscope.cn/datasets/dukguo/WenetSpeech4TTS/files) 语音数据集上，训练了多个不同带宽版本的 Chinese-Mimi 模型。这些预训练模型均可直接使用，让您无需投入大量资源从零开始训练。
 
+> Chinese-Mimi 采用渐进式训练策略，按照数据质量从 Basic、Standard 到 Premium 逐步提升模型性能。
 
 ## 前期准备
 
@@ -35,30 +36,21 @@ mkdir models
 从 [中文 HuBERT](https://huggingface.co/TencentGameMate/chinese-hubert-large) 下载预训练好的模型，并将其存放至 `/models` 文件夹内。
 
 ### 💿 环境配置
-#### a) 安装 fairseq
-由于部分依赖的兼容性问题，需要先将 pip 降级到旧版本，再按照顺序安装指定版本的 omegaconf 和 hydra-core，最后从源码安装 fairseq。
+#### 安装 ffmpeg
+ffmpeg 是项目所需的重要工具，请参考 [📄知识库](https://ku.baidu-int.com/knowledge/HFVrC7hq1Q/pKzJfZczuc/2iXLjWn6TW/b2FxYEuVtzjJPi) 进行安装。
+
+#### 安装 Python 依赖库
+安装 flash attention 2 以及其他所需的依赖库，为保证下载速度，使用清华大学镜像源。
 ```bash
 # 降级 pip 到旧版本
 python -m pip install "pip<24.1"
+
 # 安装指定版本的 omegaconf
 pip install "omegaconf>=2.0.5,<2.1"
+
 # 安装指定版本的 hydra-core
 pip install "hydra-core>=1.0.7,<1.1"
-# 从源码克隆 fairseq 仓库
-git clone https://github.com/facebookresearch/fairseq
-cd fairseq
-# 回退到一个稳定的版本
-git checkout v0.12.2
-# 安装 fairseq
-pip install --editable .
-```
 
-#### b) 安装 ffmpeg
-ffmpeg 是项目所需的重要工具，请参考 [📄知识库](https://ku.baidu-int.com/knowledge/HFVrC7hq1Q/pKzJfZczuc/2iXLjWn6TW/b2FxYEuVtzjJPi) 进行安装。
-
-#### c) 安装 Python 依赖库
-安装 flash attention 2 以及其他所需的依赖库，为保证下载速度，使用清华大学镜像源。
-```bash
 # 安装 flash attention 2
 pip install flash-attn==2.3.3 --no-build-isolation --index-url https://pypi.tuna.tsinghua.edu.cn/simple
 # 安装其他依赖库
